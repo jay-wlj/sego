@@ -91,3 +91,38 @@ func textSliceToBytes(text []Text) []byte {
 	}
 	return buf.Bytes()
 }
+
+
+// 将嵌套的分词结果输出为扁平的分词结果
+//
+// 有两种输出模式，以"中华人民共和国"为例
+//
+//  普通模式（searchMode=false）输出一个分词"中华人民共和国/ns "
+//  搜索模式（searchMode=true） 输出普通模式的再细致切分：
+//      "中华/nz 人民/n 共和/nz 共和国/ns 人民共和国/nt 中华人民共和国/ns "
+//
+// 搜索模式主要用于给搜索引擎提供尽可能多的关键字，详情请见Token结构体的注释。
+func SegmentsToTokens(segs []Segment, searchMode bool) []*Token {
+	tokens := []*Token{}
+	if searchMode {
+		for _, seg := range segs {
+			tt := tokenToTokens(seg.token)
+			tokens = append(tokens, tt...)
+			tokens = append(tokens, seg.Token())
+		}
+	} else {
+		for _, seg := range segs {
+			tokens = append(tokens, seg.Token())
+		}
+	}
+	return tokens
+}
+
+func tokenToTokens(token *Token) (tokens []*Token) {
+	for _, s := range token.segments {
+		tt := tokenToTokens(s.Token())
+		tokens = append(tokens, tt...)
+		tokens = append(tokens, s.Token())
+	}
+	return tokens
+}

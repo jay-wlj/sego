@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/adamzy/sego"
+	"github.com/huichen/sego"
 )
 
 var (
@@ -19,4 +19,8 @@ func main() {
 
 	segments := seg.Segment([]byte(*text))
 	fmt.Println(sego.SegmentsToString(segments, true))
+	tokens := sego.SegmentsToTokens(segments, true)
+	for i, t := range tokens {
+		fmt.Printf("i=%v t=%v\n", i, t.Text())
+	}
 }
