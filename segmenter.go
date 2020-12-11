@@ -8,6 +8,8 @@ import (
 	"log"
 	"math"
 	"os"
+	"path"
+	"runtime"
 	"strconv"
 	"strings"
 	"unicode"
@@ -32,6 +34,14 @@ type jumper struct {
 // 返回分词器使用的词典
 func (seg *Segmenter) Dictionary() *Dictionary {
 	return seg.dict
+}
+
+func LoadDefaultDictionary() *Segmenter {
+	seg := new(Segmenter)
+	dict_dir := path.Join(path.Dir(getCurrentFilePath()), "data")
+	seg.LoadDictionary(path.Join(dict_dir, "words.txt"))
+
+	return seg
 }
 
 // 从文件中载入词典
@@ -316,4 +326,9 @@ func toLower(text []byte) []byte {
 		}
 	}
 	return output
+}
+
+func getCurrentFilePath() string {
+	_, filePath, _, _ := runtime.Caller(1)
+	return filePath
 }
