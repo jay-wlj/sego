@@ -55,7 +55,7 @@ func (seg *Segmenter) LoadDictionary(files string) {
 		reader := bufio.NewReader(dictFile)
 		var text string
 		var freqText string
-		var frequency int
+		var frequency float64
 		var pos string
 
 		// 逐行读入分词
@@ -75,7 +75,7 @@ func (seg *Segmenter) LoadDictionary(files string) {
 
 			// 解析词频
 			var err error
-			frequency, err = strconv.Atoi(freqText)
+			frequency, err = strconv.ParseFloat(freqText, 64)
 			if err != nil {
 				continue
 			}
@@ -153,7 +153,7 @@ func (seg *Segmenter) AddWord(word string) error {
 	}
 
 	words := splitTextToWords([]byte(ss[0]))
-	frequency, err := strconv.Atoi(ss[1])
+	frequency, err := strconv.ParseFloat(ss[1], 64)
 	if err != nil {
 		return err
 	}
