@@ -59,7 +59,7 @@ func (seg *Segmenter) LoadDictionary(files string) {
 		dictFile, err := os.Open(file)
 		defer dictFile.Close()
 		if err != nil {
-			log.Fatalf("无法载入字典文件 \"%s\" \n", file)
+			log.Println("无法载入字典文件 \"%s\" \n", file)
 		}
 
 		reader := bufio.NewReader(dictFile)
