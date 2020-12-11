@@ -6,6 +6,7 @@ import "github.com/adamzy/cedar-go"
 type Dictionary struct {
 	trie           *cedar.Cedar // Cedar 前缀树
 	maxTokenLength int          // 词典中最长的分词
+	maxFrequency   int          // 词内中最大的词频
 	tokens         []Token      // 词典中所有的分词，方便遍历
 	totalFrequency int64        // 词典中所有分词的频率之和
 }
@@ -42,6 +43,9 @@ func (dict *Dictionary) addToken(token Token) {
 	dict.totalFrequency += int64(token.frequency)
 	if len(token.text) > dict.maxTokenLength {
 		dict.maxTokenLength = len(token.text)
+	}
+	if token.frequency > dict.maxFrequency {
+		dict.maxFrequency = token.frequency
 	}
 }
 
