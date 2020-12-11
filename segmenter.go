@@ -3,6 +3,7 @@ package sego
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -136,6 +137,29 @@ func (seg *Segmenter) LoadDictionary(files string) {
 //	[]Segment	划分的分词
 func (seg *Segmenter) Segment(bytes []byte) []Segment {
 	return seg.internalSegment(bytes, false)
+}
+
+// 添加分词
+// 输入参数
+// string 分词文本 词频 词性
+func (seg *Segmenter) AddWord(word string) error {
+	ss := strings.Split(word, " ")
+	if len(ss) < 2 {
+		return errors.New("no word frequency")
+	}
+	var pos string
+	if len(ss) >= 3 {
+		pos = ss[2]
+	}
+
+	words := splitTextToWords([]byte(ss[0]))
+	frequency, err := strconv.Atoi(ss[1])
+	if err != nil {
+		return err
+	}
+	token := Token{text: words, frequency: frequency, pos: pos}
+	seg.dict.addToken(token)
+	return nil
 }
 
 func (seg *Segmenter) internalSegment(bytes []byte, searchMode bool) []Segment {
