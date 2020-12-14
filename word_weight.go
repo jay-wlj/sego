@@ -3,8 +3,8 @@ package sego
 import "sort"
 
 type WordWeight struct {
-	Word   string
-	Weight float64
+	Word   string  `json:"word"`
+	Weight float64 `json:"weight"`
 }
 type WordWeights []WordWeight
 
